@@ -1,0 +1,7 @@
+# my custom alias
+alias dcbuild="sudo docker-compose build"
+alias dcup="sudo docker-compose up"
+alias dcdown="sudo docker-compose down"
+alias dockps="sudo docker ps --format "{{.ID}} {{.Names}}""
+alias docksh <id>="sudo docker exec -it <id> /bin/bash"
+docksh() { sudo docker exec -it $1 /bin/bash; }

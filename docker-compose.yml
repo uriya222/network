@@ -1,40 +1,43 @@
 version: "3.5"
 
 services:
-    attacker:
-        image: handsonsecurity/seed-ubuntu:large
-        container_name: seed-attacker
-        tty: true
-        cap_add:
-                - ALL
-        privileged: true
-        volumes:
-                - ./volumes:/volumes
-        network_mode: host
+  attacker:
+    image: handsonsecurity/seed-ubuntu:large
+    container_name: seed-attacker
+    tty: true
+    cap_add:
+      - ALL
+    privileged: true
+    volumes:
+      - ./volumes:/volumes
+    network_mode: host
 
-    host:
-        image: handsonsecurity/seed-ubuntu:large
-        container_name: host-10.9.0.5
-        tty: true
-        cap_add:
-                - ALL
-        networks:
-            net-10.9.0.0:
-                ipv4_address: 10.9.0.5
-    host1:
-        image: handsonsecurity/seed-ubuntu:large
-        container_name: host-10.9.0.6
-        tty: true
-        cap_add:
-                - ALL
-        networks:
-            net-10.9.0.0:
-                ipv4_address: 10.9.0.6
-                  
+  host:
+    image: handsonsecurity/seed-ubuntu:large
+    container_name: host-10.9.0.5
+    tty: true
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes:/volumes
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.5
+  host1:
+    image: handsonsecurity/seed-ubuntu:large
+    container_name: host-10.9.0.6
+    tty: true
+    cap_add:
+      - ALL
+    volumes:
+      - ./volumes:/volumes
+    networks:
+      net-10.9.0.0:
+        ipv4_address: 10.9.0.6
+
 networks:
-    net-10.9.0.0:
-        name: net-10.9.0.0
-        ipam:
-            config:
-                - subnet: 10.9.0.0/24
-
+  net-10.9.0.0:
+    name: net-10.9.0.0
+    ipam:
+      config:
+        - subnet: 10.9.0.0/24

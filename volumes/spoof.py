@@ -7,4 +7,4 @@ def print_pkt(pkt):
 
 
 pkt = sniff(iface=['br-919b07b9d385'],
-            filter='tcp and src host 10.9.0.5', prn=print_pkt)
+            filter='icmp and src host 10.9.0.5', count=1, prn=print_pkt)

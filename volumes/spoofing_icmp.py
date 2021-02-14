@@ -4,18 +4,16 @@ from scapy.layers.inet import IP, ICMP
 
 
 def spoof(x):
-    if receive[0][ICMP].type == 8:
-        print(receive[0][IP].src)
-        b = ICMP(seq=2, id=1, type=0)
-        a = IP(id=1)
-        a.dst = receive[0][IP].src
-        a.src = receive[0][IP].dst
-        # a.ttl = ttl
-        p = a / b / Raw(load=receive[0])
-        send(p)
+    if x[ICMP].type == 8:
+        b = ICMP(seq=x[ICMP].seq, id=x[ICMP].id, type=0)
+        a = IP()
+        a.dst = x[IP].src
+        a.src = x[IP].dst
+        p = a / b / x[3]
+        send(p,iface='br-45a48e422bd6')
         print(p.show())
 
 
-receive = sniff(iface=['br-919b07b9d385'], filter='icmp',
-                count=13, prn=spoof)
-#prn=lambda x: x.show()
+receive = sniff(iface=['br-45a48e422bd6'], filter='icmp',
+                count=10, prn=spoof)
+

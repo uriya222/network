@@ -1,35 +1,34 @@
 #!/usr/bin/python3
 from scapy.all import *
 from scapy.layers.inet import IP, ICMP
+import sys
 
 
-def routing(ttl: int, ip: str):
-    id_c = 0
-    return_list = list()
-    for i in range(ttl):
-        id_c += 1
-        b = ICMP(seq=id_c, id=1)
-        a = IP(id=id_c)
+def routing(max_ttl: int, ip: str, max_tries: int = 3):
+    problem_num = 0
+    for i in range(max_ttl):
+        a = IP(id=i+1)
         a.dst = ip
         a.ttl = i + 1
+        b = ICMP(seq=i+1, id=1)
         p = a / b
-        send(p)
-        pkta = sniff(filter='icmp', timeout=3, count=3)
-        if len(pkta) > 0:
-            for k in pkta[0]:
-                for p in k:
-                    return_list.append((p, i + 1))
-
-    n = 0
-    for i in return_list:
-        if i[0][IP].src != get_if_addr(conf.iface):
-            n += 1
-            print(f"{i[1]} : ", i[0][IP].src, " -> ", i[0][IP].dst)
-            if i[0][IP].src == ip:
+        packet = sr1(p, verbose=0, retry=3, timeout=1)
+        if packet is not None:
+            print(f"{i+1} : ", packet[IP].src, " -> ", packet[IP].dst)
+            if packet[IP].src == ip:
                 break
-    return return_list
+        else:
+            print(f"packet num {i+1} haven't received")
+            problem_num = problem_num+1
+            if problem_num == max_tries:
+                break
+
 
 if __name__ == '__main__':
-    print(get_if_addr(conf.iface))
-    ip = '8.8.8.8'
-    f = routing(15, ip)
+    if len(sys.argv) > 1 and len(sys.argv) < 3:
+        ip = sys.argv[1]
+        print("my ip is:", get_if_addr(conf.iface))
+        routing(30, ip)
+    else:
+        print(
+            f"Usage: {sys.argv[0]} [ IP ] \n\nexample: {sys.argv[0]} 8.8.8.8\n")

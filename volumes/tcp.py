@@ -2,8 +2,8 @@
 from scapy.all import *
 import socket
 
-TCP_IP = '10.9.0.5'
-TCP_PORT = 23
+TCP_IP = '8.8.8.8'
+TCP_PORT = 5001
 BUFFER_SIZE = 1024
 MESSAGE = "Hello, World!"
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

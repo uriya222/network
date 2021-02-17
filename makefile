@@ -1,10 +1,11 @@
 mains =  test.c
 CC = gcc
+SNIFF = ./volumes/sniff
 
-all: ./volumes/spoof ./volumes/test
+all: $(SNIFF) ./volumes/test
 
-./volumes/spoof:spoof.c
-	$(CC) $^ -o ./volumes/spoof -lpcap
+$(SNIFF):sniff.c
+	$(CC) $^ -o $(SNIFF) -lpcap
 
 ./volumes/test:test.c
 	$(CC) $^ -o ./volumes/test -lpcap
@@ -12,4 +13,4 @@ all: ./volumes/spoof ./volumes/test
 .PHONY: all clear
 
 clear:
-	-rm ./volumes/spoof ./volumes/test
+	-rm $(SNIFF) ./volumes/test

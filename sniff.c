@@ -27,14 +27,14 @@ void got_packet(u_char *args, const struct pcap_pkthdr *header,
         printf("Not a TCP packet. Skipping...\n\n");
         return;
     }
-    tcp_header = packet +ETHERNET_LENGTH + ip_len;
+    tcp_header = packet + ETHERNET_LENGTH + ip_len;
     int tcp_len = ((*(tcp_header + 12)) & 0xF0) >> 4;
     tcp_len *= 4;
-    printf("%d\n",tcp_len);
+    printf("%d\n", tcp_len);
     int total_headers_size = ETHERNET_LENGTH + ip_len + tcp_len;
     payload = packet + total_headers_size;
     int payload_length = header->caplen - (ETHERNET_LENGTH + ip_len + tcp_len);
-    printf("%d",payload_length);
+    printf("%d", payload_length);
     if (payload_length > 0)
     {
         const u_char *temp_pointer = payload;
@@ -69,7 +69,7 @@ int main()
     struct bpf_program fp;
     char filter_exp[] = "tcp and dst portrange 10-100";
     bpf_u_int32 net;
-    const char *device = "br-16f19c45b87f";
+    const char *device = "br-ab8676ef0483";
     int packet_count_limit = 1;
     int timeout_limit = 1000;
     handle = pcap_open_live(device, BUFSIZ, packet_count_limit, timeout_limit, errbuf);
